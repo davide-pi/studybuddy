@@ -1,9 +1,9 @@
 {
   "name": "StudyBuddy",
   "image": "mcr.microsoft.com/devcontainers/dotnet:10.0",
-  "forwardPorts": [5202],
+  "forwardPorts": [5200],
   "portsAttributes": {
-    "5202": {
+    "5200": {
       "label": "StudyBuddy",
       "onAutoForward": "openBrowser"
     }

@@ -1,5 +1,5 @@
 // 📊 Stats page
-const API_URL = "http://localhost:5202";
+const API_URL = "http://localhost:5200";
 
 checkLogin();
 
