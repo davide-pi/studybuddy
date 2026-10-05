@@ -23,7 +23,21 @@ async function loadStats() {
         row.insertCell().innerText = r.mazzo;
         row.insertCell().innerText = r.corrette + "/" + r.totale;
         row.insertCell().innerText = r.punteggio + "%";
+        row.insertCell().innerText = calcolaGiudizio(r.punteggio);
     });
+}
+
+// calcola il giudizio
+function calcolaGiudizio(punteggio) {
+    if (punteggio < 60) {
+        return "Insufficiente 😕";
+    } else if (punteggio < 70) {
+        return "Sufficiente 🙂";
+    } else if (punteggio < 90) {
+        return "Buono 👍";
+    } else {
+        return "Ottimo 🏆";
+    }
 }
 
 loadStats();

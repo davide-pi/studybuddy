@@ -56,9 +56,9 @@ public class QuizService : IQuizService
             }
 
             bool isCorrect = answer.SelectedIndex == question.RispostaCorretta;
-            if (isCorrect)
+            if (isCorrect == true)
             {
-                correct++;
+                correct++; // incrementa il numero di risposte corrette
             }
 
             details.Add(new AnswerDetail(question.Id, isCorrect, question.RispostaCorretta, question.Spiegazione));

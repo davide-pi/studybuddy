@@ -22,6 +22,11 @@
         function login() {
             var user = document.getElementById("username").value;
             var pw = document.getElementById("pwd").value;
+            // controllo campi
+            if (user == "" || pw == "") {
+                document.getElementById("msg").innerText = "Compila tutti i campi";
+                return;
+            }
             fetch("/api/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -41,6 +46,15 @@
         function register() {
             var user = document.getElementById("username").value;
             var pw = document.getElementById("pwd").value;
+            // controllo campi
+            if (user == "" || pw == "") {
+                document.getElementById("msg").innerText = "Compila tutti i campi!";
+                return;
+            }
+            if (pw.length < 4) {
+                document.getElementById("msg").innerText = "Password troppo corta";
+                return;
+            }
             fetch("/api/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

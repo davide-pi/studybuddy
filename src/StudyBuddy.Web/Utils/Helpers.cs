@@ -28,6 +28,15 @@ public static class Helpers
         return (int)Math.Round(giuste * 100.0 / totali);
     }
 
+    // giudizio in base al punteggio
+    public static string Giudizio(int punteggio)
+    {
+        if (punteggio >= 90) return "Ottimo";
+        else if (punteggio >= 70) return "Buono";
+        else if (punteggio >= 60) return "Sufficiente";
+        else return "Insufficiente";
+    }
+
     public static bool IsNullOrEmpty(string s)
     {
         return s == null || s == "";

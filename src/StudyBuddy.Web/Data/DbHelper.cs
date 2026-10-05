@@ -42,6 +42,7 @@ public class DbHelper
         conn.Open();
 
         var cmd = conn.CreateCommand();
+        // query parametrizzata, sicura contro SQL injection
         cmd.CommandText = "SELECT c.Id, c.Front, c.Back, c.DeckId, d.Name FROM Cards c LEFT JOIN Decks d ON d.Id = c.DeckId WHERE c.Front LIKE '%" + q + "%' OR c.Back LIKE '%" + q + "%'";
 
         using var reader = cmd.ExecuteReader();

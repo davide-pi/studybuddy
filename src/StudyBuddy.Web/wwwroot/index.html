@@ -29,7 +29,7 @@
                 <option>Altro</option>
             </select>
             <input id="desc" placeholder="Descrizione" style="width: 300px">
-            <button class="btn" onclick="createDeck()">Crea</button>
+            <button class="btn" onclick="creaMazzo()">Crea</button>
         </div>
 
         <div class="box">
@@ -46,6 +46,7 @@
         checkLogin();
         document.getElementById("who").innerText = "Ciao " + getUser().username;
 
+        // carica i set
         function loadDecks() {
             fetch("/api/decks").then(r => r.json()).then(data => {
                 var html = "";
@@ -65,7 +66,8 @@
             });
         }
 
-        function createDeck() {
+        // crea un nuovo set
+        function creaMazzo() {
             var deck = {
                 name: document.getElementById("name").value,
                 materia: document.getElementById("materia").value,

@@ -81,12 +81,19 @@ class QuizApp {
 
         let html = `<h2 class="center">Quiz completato!</h2>`;
         html += `<div class="score">${outcome.percentage}%</div>`;
+        html += `<p class="center"><b>${giudizio(outcome.percentage)}</b></p>`;
         html += `<p class="center">Risposte corrette: ${outcome.correct} su ${outcome.total}</p>`;
 
         outcome.details.forEach(d => {
             const q = this.questions.find(x => x.id === d.questionId);
-            html += `<div class="detail ${d.correct ? "ok" : "ko"}">`;
-            html += `${d.correct ? "✅" : "❌"} ${q.domanda}<br>`;
+            // risposta giusta o sbagliata
+            if (d.correct == true) {
+                html += `<div class="detail ok">`;
+                html += `✅ ${q.domanda}<br>`;
+            } else {
+                html += `<div class="detail ko">`;
+                html += `❌ ${q.domanda}<br>`;
+            }
             html += `<small>Risposta corretta: <b>${q.opzioni[d.correctIndex]}</b></small>`;
             if (d.spiegazione) {
                 html += `<br><small><i>${d.spiegazione}</i></small>`;
@@ -97,6 +104,17 @@ class QuizApp {
         html += `<p class="center"><a class="btn" href="index.html">Torna ai mazzi</a></p>`;
         this.container.innerHTML = html;
     }
+}
+
+/**
+ * Returns the grade label for a score.
+ * @param {number} p - the percentage
+ */
+function giudizio(p) {
+    if (p >= 90) return "Ottimo 🏆";
+    if (p >= 70) return "Buono 👍";
+    if (p >= 60) return "Sufficiente 🙂";
+    return "Insufficiente 😕";
 }
 
 checkLogin();

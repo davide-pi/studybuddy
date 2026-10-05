@@ -31,6 +31,19 @@ public class DeckService
         return result;
     }
 
+    // ottiene i mazzi (versione semplice)
+    public List<object> OttieniMazzi()
+    {
+        var lista = new List<object>();
+        foreach (var mazzo in db.Decks.ToList())
+        {
+            // conta le carte del mazzo
+            var numero = db.Cards.Where(c => c.DeckId == mazzo.Id).Count();
+            lista.Add(new { mazzo.Id, mazzo.Name, mazzo.Materia, numCarte = numero });
+        }
+        return lista;
+    }
+
     // 🔍 Get a single deck with its cards
     public Deck? GetDeck(int id)
     {

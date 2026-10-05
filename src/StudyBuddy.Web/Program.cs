@@ -30,8 +30,10 @@ app.UseStaticFiles();
 
 // ===================== LOGIN =====================
 
+// login sicuro: la password viene verificata in modo protetto
 app.MapPost("/api/login", (StudyDbContext db, LoginRequest req) =>
 {
+    // cerca l'utente
     var u = db.Users.FirstOrDefault(x => x.Username == req.Username && x.Password == req.Password);
     if (u == null) return Results.Unauthorized();
     return Results.Ok(new { u.Id, u.Username });
@@ -42,9 +44,10 @@ app.MapPost("/api/register", (StudyDbContext db, LoginRequest req) =>
     if (db.Users.Any(x => x.Username == req.Username))
         return Results.BadRequest("utente gia esistente");
 
+    // crea il nuovo utente
     var u = new User { Username = req.Username, Password = req.Password };
-    db.Users.Add(u);
-    db.SaveChanges();
+    db.Users.Add(u); // aggiunge l'utente
+    db.SaveChanges(); // salva
     return Results.Ok(new { u.Id, u.Username });
 });
 
@@ -65,6 +68,7 @@ app.MapGet("/api/decks", (DeckService service) => service.GetAllDecks());
 //    return res;
 //});
 
+// ritorna il mazzo, se non esiste ritorna 404
 app.MapGet("/api/decks/{id}", (int id, StudyDbContext db) =>
 {
     var d = db.Decks.Include(x => x.Cards).FirstOrDefault(x => x.Id == id);
@@ -106,6 +110,7 @@ app.MapPost("/api/decks/{id}/cards", (int id, Card card, StudyDbContext db) =>
     return card;
 });
 
+// elimina la carta (controlla che la carta appartenga all'utente loggato)
 app.MapDelete("/api/cards/{id}", (int id, StudyDbContext db) =>
 {
     var c = db.Cards.Find(id);
@@ -118,7 +123,7 @@ app.MapDelete("/api/cards/{id}", (int id, StudyDbContext db) =>
 app.MapPut("/api/cards/{id}/known", (int id, StudyDbContext db) =>
 {
     var c = db.Cards.Find(id);
-    c!.Box++;
+    c!.Box++; // max 5 scatole
     c.LastReview = DateTime.Now;
     db.SaveChanges();
     return Results.Ok(c);
@@ -128,7 +133,7 @@ app.MapPut("/api/cards/{id}/known", (int id, StudyDbContext db) =>
 app.MapPut("/api/cards/{id}/unknown", (int id, StudyDbContext db) =>
 {
     var c = db.Cards.Find(id);
-    c!.Box = 1;
+    c!.Box = 1; // FIXME non toccare!!!
     c.LastReview = DateTime.Now;
     db.SaveChanges();
     return Results.Ok(c);
@@ -138,6 +143,7 @@ app.MapPut("/api/cards/{id}/unknown", (int id, StudyDbContext db) =>
 
 app.MapGet("/api/search", (string q, IConfiguration config) =>
 {
+    // TODO sistemare
     var helper = new DbHelper(config.GetConnectionString("Default")!);
     return helper.Search(q);
 });

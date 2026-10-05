@@ -22,6 +22,18 @@ function shuffle(arr) {
     return arr.sort(function () { return Math.random() - 0.5; });
 }
 
+// mischia le carte (versione nuova)
+function mischia(lista) {
+    var copia = lista.slice();
+    for (var i = copia.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = copia[i];
+        copia[i] = copia[j];
+        copia[j] = tmp;
+    }
+    return copia;
+}
+
 function escapeHtml(text) {
     var div = document.createElement("div");
     div.innerText = text;
