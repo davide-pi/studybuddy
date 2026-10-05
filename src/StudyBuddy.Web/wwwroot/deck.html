@@ -9,17 +9,20 @@
 <body>
     <div class="header">
         <h2>📚 StudyBuddy</h2>
-        <div><a href="index.html">Home</a></div>
+        <div><a href="index.html">Home</a> <a href="stats.html">Statistiche</a></div>
     </div>
 
     <div class="container">
         <h1 id="title"></h1>
+        <p id="desc"></p>
+
         <div class="box">
             <h3>Aggiungi carta</h3>
             <input id="front" placeholder="Fronte (domanda)" style="width: 300px">
             <input id="back" placeholder="Retro (risposta)" style="width: 300px">
-            <button class="btn" onclick="addCard()">Aggiungi</button>
+            <button class="btn" id="btnAddCard">Aggiungi</button>
         </div>
+
         <div class="box">
             <h3>Aggiungi domanda al quiz</h3>
             <input id="domanda" placeholder="Domanda" style="width: 600px"><br>
@@ -34,60 +37,17 @@
                 <option value="3">3</option>
                 <option value="4">4</option>
             </select>
-            <button class="btn" onclick="addQuestion()">Aggiungi domanda</button>
+            <button class="btn" id="btnAddQuestion">Aggiungi domanda</button>
         </div>
-        <div class="box" id="cards"></div>
-        <button class="btn btn-red" onclick="deleteDeck()">Elimina mazzo</button>
+
+        <div class="box">
+            <h3>Carte (<span id="count">0</span>)</h3>
+            <div id="cards"></div>
+        </div>
+
+        <button class="btn btn-red" id="btnDelete">Elimina mazzo</button>
     </div>
 
-    <script>
-        checkLogin();
-        var id = getParam("id");
-
-        function load() {
-            fetch("/api/decks/" + id).then(r => r.json()).then(d => {
-                document.getElementById("title").innerText = d.name;
-                var html = "";
-                d.cards.forEach(c => {
-                    html += '<div class="card-row"><span><b>' + c.front + '</b> → ' + c.back + '</span>';
-                    html += '<button class="btn btn-red" onclick="delCard(' + c.id + ')">X</button></div>';
-                });
-                document.getElementById("cards").innerHTML = html;
-            });
-        }
-
-        function addCard() {
-            fetch("/api/decks/" + id + "/cards", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ front: document.getElementById("front").value, back: document.getElementById("back").value })
-            }).then(() => load());
-        }
-
-        function addQuestion() {
-            var body = {
-                domanda: document.getElementById("domanda").value,
-                opzioni: [document.getElementById("op1").value, document.getElementById("op2").value, document.getElementById("op3").value, document.getElementById("op4").value],
-                rispostaCorretta: parseInt(document.getElementById("corretta").value)
-            };
-            fetch("/api/quiz/" + id + "/questions", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body)
-            }).then(() => alert("Domanda aggiunta!"));
-        }
-
-        function delCard(cid) {
-            fetch("/api/cards/" + cid, { method: "DELETE" }).then(() => load());
-        }
-
-        function deleteDeck() {
-            if (confirm("Sicuro?")) {
-                fetch("/api/decks/" + id, { method: "DELETE" }).then(() => window.location.href = "index.html");
-            }
-        }
-
-        load();
-    </script>
+    <script type="module" src="js/deck.js"></script>
 </body>
 </html>

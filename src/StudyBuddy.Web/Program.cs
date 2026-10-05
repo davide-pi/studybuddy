@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using StudyBuddy.Web.Data;
 using StudyBuddy.Web.Models;
 using StudyBuddy.Web.Services;
+using StudyBuddy.Web.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<StudyDbContext>(o => o.UseSqlite(builder.Configura
 // Register MVC controllers and application services
 builder.Services.AddControllers();
 builder.Services.AddScoped<IQuizService, QuizService>();
+builder.Services.AddScoped<DeckService>();
 
 var app = builder.Build();
 
@@ -48,17 +50,20 @@ app.MapPost("/api/register", (StudyDbContext db, LoginRequest req) =>
 
 // ===================== MAZZI =====================
 
-app.MapGet("/api/decks", (StudyDbContext db) =>
-{
-    var decks = db.Decks.ToList();
-    var res = new List<object>();
-    foreach (var d in decks)
-    {
-        var n = db.Cards.Count(c => c.DeckId == d.Id);
-        res.Add(new { d.Id, d.Name, d.Materia, d.Descrizione, numCarte = n });
-    }
-    return res;
-});
+// ✅ moved to DeckService
+app.MapGet("/api/decks", (DeckService service) => service.GetAllDecks());
+
+//app.MapGet("/api/decks", (StudyDbContext db) =>
+//{
+//    var decks = db.Decks.ToList();
+//    var res = new List<object>();
+//    foreach (var d in decks)
+//    {
+//        var n = db.Cards.Count(c => c.DeckId == d.Id);
+//        res.Add(new { d.Id, d.Name, d.Materia, d.Descrizione, numCarte = n });
+//    }
+//    return res;
+//});
 
 app.MapGet("/api/decks/{id}", (int id, StudyDbContext db) =>
 {
@@ -138,6 +143,7 @@ app.MapGet("/api/search", (string q, IConfiguration config) =>
 });
 
 app.MapControllers();
+app.MapStatsEndpoints(); // 📊
 
 app.Run();
 
