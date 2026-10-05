@@ -7,7 +7,7 @@ using StudyBuddy.Web.Endpoints;
 var builder = WebApplication.CreateBuilder(args);
 
 // database
-Directory.CreateDirectory("data");
+Directory.CreateDirectory("database");
 builder.Services.AddDbContext<StudyDbContext>(o => o.UseSqlite(builder.Configuration.GetConnectionString("Default")));
 
 // Register MVC controllers and application services
@@ -144,6 +144,7 @@ app.MapGet("/api/search", (string q, IConfiguration config) =>
 
 app.MapControllers();
 app.MapStatsEndpoints(); // 📊
+app.MapAdmin();
 
 app.Run();
 
