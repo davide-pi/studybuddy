@@ -31,6 +31,12 @@
             <button class="btn" onclick="createDeck()">Crea</button>
         </div>
 
+        <div class="box">
+            <input id="q" placeholder="Cerca nelle carte..." style="width: 400px">
+            <button class="btn" onclick="search()">Cerca</button>
+            <div id="results"></div>
+        </div>
+
         <h2>I tuoi mazzi</h2>
         <div id="decks" class="deck-list"></div>
     </div>
@@ -50,6 +56,7 @@
                     html += '<p>' + (d.descrizione || '') + '</p>';
                     html += '<p><b>' + d.numCarte + '</b> carte</p>';
                     html += '<a class="btn" href="study.html?deck=' + d.id + '">Studia</a> ';
+                    html += '<a class="btn btn-green" href="quiz.html?deck=' + d.id + '">Quiz</a> ';
                     html += '<a class="btn" href="deck.html?id=' + d.id + '">Modifica</a>';
                     html += '</div>';
                 }
@@ -72,6 +79,22 @@
                 document.getElementById("desc").value = "";
                 loadDecks();
             });
+        }
+
+        // ricerca
+        async function search() {
+            const q = document.getElementById("q").value;
+            const res = await fetch("/api/search?q=" + q);
+            if (!res.ok) {
+                document.getElementById("results").innerHTML = "<p>Errore nella ricerca</p>";
+                return;
+            }
+            const data = await res.json();
+            let html = "<p>" + data.length + " risultati</p>";
+            data.forEach(r => {
+                html += '<div class="card-row"><span><b>' + r.front + '</b> → ' + r.back + '</span><i>' + r.deckName + '</i></div>';
+            });
+            document.getElementById("results").innerHTML = html;
         }
 
         loadDecks();

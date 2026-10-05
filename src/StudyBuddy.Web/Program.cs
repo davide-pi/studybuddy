@@ -1,12 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using StudyBuddy.Web.Data;
 using StudyBuddy.Web.Models;
+using StudyBuddy.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // database
 Directory.CreateDirectory("data");
 builder.Services.AddDbContext<StudyDbContext>(o => o.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+
+// Register MVC controllers and application services
+builder.Services.AddControllers();
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 var app = builder.Build();
 
@@ -123,6 +128,16 @@ app.MapPut("/api/cards/{id}/unknown", (int id, StudyDbContext db) =>
     db.SaveChanges();
     return Results.Ok(c);
 });
+
+// ===================== RICERCA =====================
+
+app.MapGet("/api/search", (string q, IConfiguration config) =>
+{
+    var helper = new DbHelper(config.GetConnectionString("Default")!);
+    return helper.Search(q);
+});
+
+app.MapControllers();
 
 app.Run();
 

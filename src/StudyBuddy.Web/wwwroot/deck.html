@@ -20,6 +20,22 @@
             <input id="back" placeholder="Retro (risposta)" style="width: 300px">
             <button class="btn" onclick="addCard()">Aggiungi</button>
         </div>
+        <div class="box">
+            <h3>Aggiungi domanda al quiz</h3>
+            <input id="domanda" placeholder="Domanda" style="width: 600px"><br>
+            <input id="op1" placeholder="Opzione 1">
+            <input id="op2" placeholder="Opzione 2">
+            <input id="op3" placeholder="Opzione 3">
+            <input id="op4" placeholder="Opzione 4"><br>
+            Risposta corretta:
+            <select id="corretta">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+            <button class="btn" onclick="addQuestion()">Aggiungi domanda</button>
+        </div>
         <div class="box" id="cards"></div>
         <button class="btn btn-red" onclick="deleteDeck()">Elimina mazzo</button>
     </div>
@@ -46,6 +62,19 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ front: document.getElementById("front").value, back: document.getElementById("back").value })
             }).then(() => load());
+        }
+
+        function addQuestion() {
+            var body = {
+                domanda: document.getElementById("domanda").value,
+                opzioni: [document.getElementById("op1").value, document.getElementById("op2").value, document.getElementById("op3").value, document.getElementById("op4").value],
+                rispostaCorretta: parseInt(document.getElementById("corretta").value)
+            };
+            fetch("/api/quiz/" + id + "/questions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body)
+            }).then(() => alert("Domanda aggiunta!"));
         }
 
         function delCard(cid) {

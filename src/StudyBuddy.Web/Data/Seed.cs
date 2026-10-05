@@ -47,5 +47,22 @@ public static class Seed
 
         db.Decks.AddRange(storia, scienze, inglese, info);
         db.SaveChanges();
+
+        // Seed quiz questions (correct answer index is zero-based)
+        db.Questions.AddRange(
+            new QuizQuestion { DeckId = storia.Id, Domanda = "In che anno è stata proclamata l'Unità d'Italia?", Opzioni = "1848|1861|1870|1915", RispostaCorretta = 1, Spiegazione = "Il 17 marzo 1861 a Torino." },
+            new QuizQuestion { DeckId = storia.Id, Domanda = "Chi guidò la spedizione dei Mille?", Opzioni = "Cavour|Mazzini|Garibaldi|Vittorio Emanuele II", RispostaCorretta = 2 },
+            new QuizQuestion { DeckId = storia.Id, Domanda = "Da dove partì la spedizione dei Mille?", Opzioni = "Quarto (Genova)|Marsala|Napoli|Livorno", RispostaCorretta = 0, Spiegazione = "Partì da Quarto e sbarcò a Marsala." },
+            new QuizQuestion { DeckId = storia.Id, Domanda = "Quale città fu la prima capitale del Regno d'Italia?", Opzioni = "Roma|Firenze|Torino|Milano", RispostaCorretta = 2 },
+            new QuizQuestion { DeckId = storia.Id, Domanda = "Con quale evento Roma entra nel Regno d'Italia?", Opzioni = "Breccia di Porta Pia|Battaglia di Solferino|Plebiscito di Napoli|Congresso di Vienna", RispostaCorretta = 0 },
+            new QuizQuestion { DeckId = scienze.Id, Domanda = "Quale organulo produce energia (ATP)?", Opzioni = "Ribosoma|Mitocondrio|Lisosoma|Vacuolo", RispostaCorretta = 1 },
+            new QuizQuestion { DeckId = scienze.Id, Domanda = "Quale di queste cellule NON ha il nucleo?", Opzioni = "Neurone|Batterio|Cellula vegetale|Globulo bianco", RispostaCorretta = 1, Spiegazione = "I batteri sono procarioti." },
+            new QuizQuestion { DeckId = scienze.Id, Domanda = "Dove avviene la fotosintesi?", Opzioni = "Nel nucleo|Nei mitocondri|Nei cloroplasti|Nella membrana", RispostaCorretta = 2 },
+            new QuizQuestion { DeckId = scienze.Id, Domanda = "Cosa fanno i ribosomi?", Opzioni = "Sintetizzano proteine|Digeriscono sostanze|Producono energia|Contengono il DNA", RispostaCorretta = 0 },
+            new QuizQuestion { DeckId = info.Id, Domanda = "Quanti livelli ha il modello ISO/OSI?", Opzioni = "4|5|7|8", RispostaCorretta = 2 },
+            new QuizQuestion { DeckId = info.Id, Domanda = "Quale protocollo traduce i nomi in indirizzi IP?", Opzioni = "HTTP|DNS|FTP|SMTP", RispostaCorretta = 1 },
+            new QuizQuestion { DeckId = info.Id, Domanda = "Qual è la porta di default di HTTP?", Opzioni = "21|80|443|8080", RispostaCorretta = 1 }
+        );
+        db.SaveChanges();
     }
 }
